@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NE-BC Exam Simulator</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ── Access Gate ──────────────────────────────────────────────────────── -->
+<div id="access-gate">
+  <div class="gate-bg-shapes">
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+    <div class="shape shape-3"></div>
+  </div>
+  <div class="gate-card">
+    <div class="gate-logo">
+      <div class="logo-badge">NE<span>·</span>BC</div>
+      <div class="logo-sub">Nurse Executive Certification</div>
+    </div>
+
+    <div class="gate-title">Practice Exam Simulator</div>
+    <div class="gate-meta-row">
+      <div class="gate-chip">&#9998; 300 Questions</div>
+      <div class="gate-chip">&#9719; 4 Hours</div>
+      <div class="gate-chip">&#10003; Pass: 72%</div>
+    </div>
+
+    <div class="gate-divider"></div>
+
+    <label for="access-code-input">Access Code</label>
+    <div class="input-wrap">
+      <input
+        type="text"
+        id="access-code-input"
+        placeholder="Enter code"
+        maxlength="12"
+        autocomplete="off"
+        spellcheck="false"
+      />
+    </div>
+    <div class="error-msg" id="gate-error"></div>
+    <button class="btn-start" id="gate-submit">
+      <span>Begin Exam</span>
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 10h12M11 6l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+
+    <div class="gate-footer">
+      All four NE-BC domains &bull; ANCC-aligned content &bull; Progress auto-saved
+    </div>
+  </div>
+</div>
+
+<!-- ── Exam App ─────────────────────────────────────────────────────────── -->
+<div id="exam-app">
+
+  <!-- Header -->
+  <header class="exam-header">
+    <div class="brand">
+      <span class="brand-ne">NE</span><span class="brand-dot">·</span><span class="brand-bc">BC</span>
+      <span class="brand-label">Simulator</span>
+    </div>
+
+    <div class="header-center">
+      <div class="progress-info">
+        <span id="progress-text">0 of 300 answered</span>
+      </div>
+    </div>
+
+    <div class="timer-block" id="timer-block">
+      <div class="timer-icon">&#9716;</div>
+      <div>
+        <div class="timer-label">Time Left</div>
+        <div class="timer-value" id="timer-value">04:00:00</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Progress bar -->
+  <div class="progress-bar-wrap">
+    <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
+  </div>
+
+  <!-- Body -->
+  <div class="exam-body">
+
+    <!-- Question Card -->
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num" id="q-num-label">Question 1 of 300</div>
+        <div class="q-meta-right">
+          <span class="domain-badge leadership" id="domain-badge">Leadership</span>
+          <button class="flag-btn" id="flag-btn" title="Flag for review">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 2v12M3 2h8l-2 4 2 4H3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span id="flag-label">Flag</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="question-text" id="question-text">Loading...</div>
+
+      <ul class="options-list" id="options-list"></ul>
+
+      <div class="explanation-panel" id="explanation-panel"></div>
+
+      <div class="q-nav">
+        <button class="btn-nav btn-prev" id="btn-prev">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Previous
+        </button>
+        <button class="btn-submit-exam" id="btn-submit-exam">Submit Exam</button>
+        <button class="btn-nav btn-next" id="btn-next">
+          Next
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Side Panel -->
+    <aside class="side-panel">
+      <div class="side-card">
+        <h3>Progress</h3>
+        <div class="stats-grid">
+          <div class="stat-box answered-box">
+            <div class="stat-num" id="stat-answered">0</div>
+            <div class="stat-label">Answered</div>
+          </div>
+          <div class="stat-box flagged-box">
+            <div class="stat-num" id="stat-flagged">0</div>
+            <div class="stat-label">Flagged</div>
+          </div>
+          <div class="stat-box remaining-box">
+            <div class="stat-num" id="stat-remaining">300</div>
+            <div class="stat-label">Remaining</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="side-card">
+        <h3>Question Navigator</h3>
+        <div class="legend-row">
+          <div class="legend-item"><div class="legend-dot answered-d"></div> Answered</div>
+          <div class="legend-item"><div class="legend-dot flagged-d"></div> Flagged</div>
+          <div class="legend-item"><div class="legend-dot current-d"></div> Current</div>
+        </div>
+        <div class="q-grid" id="q-grid"></div>
+      </div>
+
+      <div class="side-card tips-card">
+        <div class="tips-icon">&#128161;</div>
+        <div class="tips-text">
+          Flag questions to revisit. Navigate freely — your progress saves automatically.
+        </div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<!-- ── Results Page ──────────────────────────────────────────────────────── -->
+<div id="results-page">
+  <div class="results-container">
+
+    <div class="results-header">
+      <div class="results-logo">NE<span>·</span>BC</div>
+      <h1>Exam Complete</h1>
+      <p id="res-timeout-msg" style="display:none;" class="timeout-msg">Time expired — exam was auto-submitted.</p>
+    </div>
+
+    <!-- Score Summary -->
+    <div class="score-block">
+      <div class="score-card score-main" id="res-status-card">
+        <div class="sc-icon" id="res-icon">&#9733;</div>
+        <div class="sc-value" id="res-status">—</div>
+        <div class="sc-sub" id="res-sub">—</div>
+      </div>
+      <div class="score-card">
+        <div class="sc-label">Score</div>
+        <div class="sc-value" id="res-score">—</div>
+        <div class="sc-sub">Questions correct</div>
+      </div>
+      <div class="score-card">
+        <div class="sc-label">Percentage</div>
+        <div class="sc-value" id="res-pct">—</div>
+        <div class="sc-sub">Passing threshold: 72%</div>
+      </div>
+    </div>
+
+    <!-- Domain Breakdown -->
+    <div class="domain-breakdown">
+      <h2>&#9000; Performance by Domain</h2>
+      <div id="domain-breakdown-rows"></div>
+    </div>
+
+    <!-- Actions -->
+    <div class="results-actions">
+      <button class="btn-results secondary" id="btn-print">&#128438; Print Results</button>
+      <button class="btn-results primary" id="btn-reset">&#8635; New Exam</button>
+    </div>
+
+    <!-- Review Toggle -->
+    <div class="review-controls">
+      <h2>Answer Review</h2>
+      <div class="review-filter">
+        <button class="filter-btn active" data-filter="all">All 300</button>
+        <button class="filter-btn" data-filter="wrong">Wrong Only</button>
+        <button class="filter-btn" data-filter="correct">Correct Only</button>
+      </div>
+    </div>
+    <div id="review-list"></div>
+
+  </div>
+</div>
+
+<script src="questions.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
